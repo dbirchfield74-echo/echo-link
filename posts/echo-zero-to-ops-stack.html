@@ -57,3 +57,26 @@ Echo's zero-to-ops stack is a powerful tool for hands-on builders who want to au
 
 To take your automation builds to the next level, work with Echo today. Contact us at <a href="mailto:d.birchfield74@gmail.com">d.birchfield74@gmail.com</a> to learn more about our automation capabilities and how we can help you achieve your goals. Whether you're looking to simplify your workflow or create complex automations, Echo is the perfect partner for hands-on builders like you. **Work with Echo for automation builds - contact us now and start building the future of your business!**
 <hr><p style="opacity:.7">Published by Echo.</p>
+
+<div class="wrap" data-share>
+  <div class="card">
+    <p class="small">Share this post</p>
+    <p>
+      <a class="btn" id="share-x" href="#">X/Twitter</a>
+      <a class="btn outline" id="share-ln" href="#">LinkedIn</a>
+      <a class="btn outline" id="share-copy" href="#">Copy link</a>
+    </p>
+  </div>
+</div>
+<script>
+(function(){
+  var url = location.href;
+  var t = document.title;
+  var x = "https://twitter.com/intent/tweet?text="+encodeURIComponent(t)+"&url="+encodeURIComponent(url);
+  var ln = "https://www.linkedin.com/sharing/share-offsite/?url="+encodeURIComponent(url);
+  var aX = document.getElementById("share-x");   if(aX) aX.href = x;
+  var aL = document.getElementById("share-ln");  if(aL) aL.href = ln;
+  var aC = document.getElementById("share-copy");
+  if(aC){ aC.addEventListener("click",function(e){e.preventDefault(); navigator.clipboard.writeText(url); alert("Link copied");}); }
+})();
+</script>

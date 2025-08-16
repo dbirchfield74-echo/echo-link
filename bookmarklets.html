@@ -1,7 +1,7 @@
 <!doctype html><meta charset="utf-8"><title>Echo • Bookmarklets</title>
 <link rel="stylesheet" href="./assets/css/site.css">
 <body>
-<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./search.html">Search</a><a href="./contact.html">Contact</a></nav>
+<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./search.html">Search</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./contact.html">Contact</a></nav>
 <div class="wrap">
   <h1>Bookmarklets</h1>
   <p class="small">Drag these to your bookmarks bar.</p>
@@ -9,6 +9,6 @@
     <a class="btn" href="javascript:(function(){var s=window.getSelection?String(window.getSelection()):'';var u=location.href;var t=prompt('Post title','Quick Note');if(!t)return;var body=encodeURIComponent((s||'')+'\n\nSource: '+u);var title=encodeURIComponent('Post: '+t);location.href='https://github.com/dbirchfield74-echo/echo-link/issues/new?template=post.yml&labels=post&title='+title+'&body='+body;})();">Post from selection</a>
     <a class="btn outline" href="javascript:(function(){var s=window.getSelection?String(window.getSelection()):'';var u=location.href;var t=prompt('Lead title','Project idea');if(!t)return;var body=encodeURIComponent('Describe the project:\n\n'+(s||'')+'\n\nSource: '+u);var title=encodeURIComponent('Lead: '+t);location.href='https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title='+title+'&body='+body;})();">Lead from selection</a>
   </p>
-  <p class="small">Select text on any page, click the bookmarklet, and it opens a GitHub Issue prefilled. Free pipeline, no backend.</p>
+  <p class="small">Select text on any page, click the bookmarklet, and it opens a GitHub Issue prefilled (free pipeline, no backend).</p>
 </div>
 </body>

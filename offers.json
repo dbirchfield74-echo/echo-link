@@ -1,0 +1,26 @@
+[
+  {
+    "id": "starter",
+    "title": "Starter",
+    "price": 0,
+    "currency": "USD",
+    "url": "https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Starter%20%28%29&body=Package%3A%20Starter%20%28free%29%250AWebsite%20%2B%20intake%20%2B%20SEO",
+    "summary": "Pages site + intake + SEO"
+  },
+  {
+    "id": "mini",
+    "title": "Ops Mini",
+    "price": 199,
+    "currency": "USD",
+    "url": "https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Ops%20Mini%20%28%29&body=Package%3A%20Ops%20Mini%250ACustom%20landing%2C%20intake%20routing%2C%20simple%20content",
+    "summary": "Landing + routing + content flow"
+  },
+  {
+    "id": "pro",
+    "title": "Ops Pro",
+    "price": 499,
+    "currency": "USD",
+    "url": "https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Ops%20Pro%20%28%29&body=Package%3A%20Ops%20Pro%250AAutomations%2C%20content%20pipeline%2C%20deploy%20support",
+    "summary": "Automations + pipeline + deploy"
+  }
+]
