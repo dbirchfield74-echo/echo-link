@@ -1,10 +1,10 @@
-name: post from issue
+name: post from issue (rich)
 on:
   issues:
     types: [opened, edited, labeled]
 permissions:
   contents: write
-  issues: read
+  issues: write
 jobs:
   publish:
     if: contains(toJson(github.event.issue.labels), "\"post\"")
@@ -13,37 +13,52 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            const issue = context.payload.issue;
-            const owner = context.repo.owner;
-            const repo  = context.repo.repo;
+            const issue  = context.payload.issue;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
 
-            // derive title/slug
+            // parse title/slug
             let title = issue.title.replace(/^post:\s*/i,'').trim();
             if (!title) title = "Untitled";
-            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-
-            // very simple HTML from issue body (kept safe)
-            const escape = s => s.replace(/[&<>]/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[c]));
-            const bodyHtml = "<pre>"+escape(issue.body||"").trim()+"</pre>";
-
-            const html = `<!doctype html><meta charset="utf-8"><title>${title} • Echo</title>
-<link rel="canonical" href="./${slug}.html">
-<style>body{font-family:system-ui;margin:2rem auto;max-width:850px;line-height:1.55} pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:12px;border:1px solid #ddd;border-radius:8px;background:#f7f7f7}</style>
-<h1>${title}</h1>
-${bodyHtml}
-<hr><p style="opacity:.7">Published via Issue → Post.</p>`;
-
+            const slug  = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
             const pathPost = `posts/${slug}.html`;
-            const pathList = `posts.json`;
+            const listPath = `posts.json`;
+            const base     = "https://dbirchfield74-echo.github.io/echo-link`;
 
-            // helper: get file (or null)
+            // extract "Post content" section if issue template used; else fall back to full body
+            const body = issue.body || "";
+            const sect = (() => {
+              const re = /###\s*Post content[\s\S]*?\n([\s\S]*?)(?:\n###|$)/i;
+              const m  = re.exec(body);
+              return m ? m[1].trim() : "";
+            })();
+            const md = sect || body;
+
+            // render Markdown via GitHub API (GFM)
+            const { data: rendered } = await github.request('POST /markdown', {
+              text: md,
+              mode: 'gfm',
+              context: `${owner}/${repo}`
+            });
+
+            // assemble HTML
+            const html = `<!doctype html><meta charset="utf-8">
+<title>${title} • Echo</title>
+<link rel="canonical" href="./${slug}.html">
+<link rel="alternate" type="application/rss+xml" href="${base}/feed.xml" title="Echo Feed">
+<link rel="stylesheet" href="../assets/css/site.css">
+<style>main{margin:2rem auto;max-width:850px;line-height:1.55} .meta{color:#9fb0c3}</style>
+<main>
+  <h1>${title}</h1>
+  <p class="meta">${new Date().toISOString().slice(0,10)}</p>
+  <article>${rendered}</article>
+  <hr><p class="meta">Published via Issue → Post.</p>
+</main>`;
+
             async function getFile(path){
-              try {
-                const r = await github.rest.repos.getContent({owner,repo,path});
-                return r.data;
-              } catch (e) { return null }
+              try { const r = await github.rest.repos.getContent({owner,repo,path}); return r.data }
+              catch { return null }
             }
-            // write/update file
             async function putFile(path, content, sha, msg){
               return await github.rest.repos.createOrUpdateFileContents({
                 owner, repo, path, message: msg,
@@ -52,18 +67,46 @@ ${bodyHtml}
               });
             }
 
-            // write post
+            // write post file
             const existing = await getFile(pathPost);
-            await putFile(pathPost, html, existing?.sha, `Post from issue #${issue.number}: ${title}`);
+            await putFile(pathPost, html, existing?.sha, `post: ${title}`);
 
             // update posts.json
             let posts = [];
-            const list = await getFile(pathList);
-            if (list) {
+            const list = await getFile(listPath);
+            if (list){
               const txt = Buffer.from(list.content, list.encoding).toString('utf8');
               try { posts = JSON.parse(txt) } catch {}
             }
             if (!posts.find(p => p.slug===slug)) {
               posts.push({ title, slug, date: new Date().toISOString().slice(0,10) });
             }
-            await putFile(pathList, JSON.stringify(posts, null, 2), list?.sha, `Update posts.json for ${title}`);
+            await putFile(listPath, JSON.stringify(posts, null, 2), list?.sha, `posts.json: ${title}`);
+
+            // generate RSS feed (last 20)
+            const items = posts.slice(-20).map(p => {
+              const link = `${base}/posts/${p.slug}.html`;
+              const pub  = new Date((p.date||'') + 'T00:00:00Z').toUTCString();
+              return `<item>
+  <title><![CDATA[${p.title}]]></title>
+  <link>${link}</link>
+  <guid>${link}</guid>
+  <pubDate>${pub}</pubDate>
+</item>`;
+            }).join('\n');
+            const feed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+  <title>Echo</title>
+  <link>${base}/</link>
+  <description>Echo — ops & automations</description>
+  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+  ${items}
+</channel></rss>`;
+            const feedFile = await getFile('feed.xml');
+            await putFile('feed.xml', feed, feedFile?.sha, 'build: feed.xml updated');
+
+            // (optional) comment back
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: issue.number,
+              body: `Post published: ${base}/posts/${slug}.html  \nFeed: ${base}/feed.xml`
+            });

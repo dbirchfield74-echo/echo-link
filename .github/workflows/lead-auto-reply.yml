@@ -1,0 +1,26 @@
+name: lead auto-reply
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write
+jobs:
+  reply:
+    if: contains(toJson(github.event.issue.labels), "\"lead\"")
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const issue  = context.payload.issue;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
+            const body = [
+              "Thanks for the lead — we’ll reply within 1 business day.",
+              "",
+              "**Next steps**",
+              "1) If you prefer email: d.birchfield74@gmail.com",
+              "2) See pricing: https://dbirchfield74-echo.github.io/echo-link/pricing.html",
+              "3) You can also request a PDF proposal from the Contact page.",
+            ].join("\\n");
+            await github.rest.issues.createComment({owner, repo, issue_number: issue.number, body});
