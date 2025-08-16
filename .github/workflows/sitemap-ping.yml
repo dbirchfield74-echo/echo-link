@@ -1,0 +1,19 @@
+name: sitemap ping
+on:
+  push:
+    branches: [main]
+    paths:
+      - "posts/**"
+      - "posts.json"
+      - "sitemap.xml"
+permissions: {}
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify search engines
+        run: |
+          BASE="https://dbirchfield74-echo.github.io/echo-link"
+          SITEMAP="$BASE/sitemap.xml"
+          curl -fsS "https://www.google.com/ping?sitemap=${SITEMAP}" || true
+          curl -fsS "https://www.bing.com/ping?sitemap=${SITEMAP}" || true
