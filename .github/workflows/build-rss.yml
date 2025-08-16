@@ -1,0 +1,58 @@
+name: build rss
+on:
+  push:
+    branches: [main]
+    paths:
+      - "posts/**"
+      - "posts.json"
+permissions:
+  contents: write
+jobs:
+  rss:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const base  = "https://'+$RepoFull.Split('/')[0]+'.github.io/'+$RepoFull.Split('/')[1]+'";
+            // get posts.json
+            let posts = [];
+            try {
+              const r = await github.rest.repos.getContent({owner,repo,path:"posts.json"});
+              const txt = Buffer.from(r.data.content, r.data.encoding).toString("utf8");
+              posts = JSON.parse(txt);
+            } catch(e) { posts = []; }
+            // build RSS 2.0
+            const now = new Date().toUTCString();
+            const items = posts.map(p => `
+              <item>
+                <title>${p.title}</title>
+                <link>${base}/posts/${p.slug}.html</link>
+                <guid>${base}/posts/${p.slug}.html</guid>
+                <pubDate>${(p.date||"").toString()}</pubDate>
+                <description><![CDATA[ ${p.title} ]]></description>
+              </item>`).join("\n");
+            const xml = `<?xml version="1.0" encoding="UTF-8"?>
+              <rss version="2.0">
+                <channel>
+                  <title>'+$Brand+' Feed</title>
+                  <link>${base}/</link>
+                  <description>'+$Brand+' posts</description>
+                  <lastBuildDate>${now}</lastBuildDate>
+                  ${items}
+                </channel>
+              </rss>`;
+            // write/update feed.xml
+            let sha=null;
+            try {
+              const ex = await github.rest.repos.getContent({owner,repo,path:"feed.xml"});
+              sha = ex.data.sha;
+            } catch(e){}
+            await github.rest.repos.createOrUpdateFileContents({
+              owner, repo, path: "feed.xml",
+              message: "build: update rss feed",
+              content: Buffer.from(xml,'utf8').toString('base64'),
+              sha
+            });
