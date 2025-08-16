@@ -36,5 +36,6 @@ fetch('./posts.json').then(r=>r.ok?r.json():[]).then(list=>{
   list.slice(-6).reverse().forEach(p=>{ const li=document.createElement('li'); li.innerHTML = '<a href="posts/'+p.slug+'.html">'+p.title+'</a> — <span class="small">'+p.date+'</span>'; ul.appendChild(li); });
 }).catch(()=>{});
 </script>
-<div data-cta class="wrap" style="margin-top:1rem"><a class="btn" href="./proposals/simple-proposal.html">Get a proposal</a> <a class="btn outline" href="./contact.html">Contact</a></div></body></html>
+<div data-cta class="wrap" style="margin-top:1rem"><a class="btn" href="./proposals/simple-proposal.html">Get a proposal</a> <a class="btn outline" href="./contact.html">Contact</a></div><div class="wrap" style="margin-top:1rem"><a class="btn" href="https://github.com/dbirchfield74-echo/echo-link/issues/new?template=quote.yml&labels=quote%2Clead&title=Quote%3A%20Quick%20intro">Request a Quote</a> <a class="btn outline" href="./contact.html">Contact</a></div>
+</body></html>
 <!-- CTA injected -->

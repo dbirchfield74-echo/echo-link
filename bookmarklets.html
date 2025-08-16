@@ -1,14 +1,16 @@
-<!doctype html><meta charset="utf-8"><title>Echo • Bookmarklets</title>
-<link rel="stylesheet" href="./assets/css/site.css">
+<!doctype html><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Echo • Bookmarklets</title>
+<link rel="stylesheet" href="./assets/css/site.css"/>
 <body>
-<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./search.html">Search</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./contact.html">Contact</a></nav>
+<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./contact.html">Contact</a></nav>
 <div class="wrap">
   <h1>Bookmarklets</h1>
-  <p class="small">Drag these to your bookmarks bar.</p>
-  <p>
-    <a class="btn" href="javascript:(function(){var s=window.getSelection?String(window.getSelection()):'';var u=location.href;var t=prompt('Post title','Quick Note');if(!t)return;var body=encodeURIComponent((s||'')+'\n\nSource: '+u);var title=encodeURIComponent('Post: '+t);location.href='https://github.com/dbirchfield74-echo/echo-link/issues/new?template=post.yml&labels=post&title='+title+'&body='+body;})();">Post from selection</a>
-    <a class="btn outline" href="javascript:(function(){var s=window.getSelection?String(window.getSelection()):'';var u=location.href;var t=prompt('Lead title','Project idea');if(!t)return;var body=encodeURIComponent('Describe the project:\n\n'+(s||'')+'\n\nSource: '+u);var title=encodeURIComponent('Lead: '+t);location.href='https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title='+title+'&body='+body;})();">Lead from selection</a>
-  </p>
-  <p class="small">Select text on any page, click the bookmarklet, and it opens a GitHub Issue prefilled (free pipeline, no backend).</p>
+  <p class="small">Drag these to your bookmarks bar. Then click on any page to capture content to Echo.</p>
+  <ul class="clean" style="margin-top:1rem">
+    <li><a class="btn" href="javascript:">✚ Post to Echo</a> <span class="small">Create a Post issue from selected text</span></li>
+    <li><a class="btn" href="javascript:%28function%28%29%7B%0A%20%20var%20sel%20%3D%20window.getSelection%20%3F%20String%28window.getSelection%28%29%29%20%3A%20%27%27%3B%0A%20%20var%20title%20%3D%20prompt%28%27Lead%20short%20title%3A%27%2C%20document.title%29%3B%0A%20%20if%28%21title%29%20return%3B%0A%20%20var%20body%20%3D%20%27Source%3A%20%27%20%2B%20location.href%20%2B%20%27%5Cn%5CnNotes%3A%5Cn%27%20%2B%20%28sel%7C%7C%27%27%29%3B%0A%20%20var%20u%20%3D%20%27https%3A%2F%2Fgithub.com%2Fdbirchfield74-echo%2Fecho-link%2Fissues%2Fnew%3Flabels%3Dlead%27%20%2B%0A%20%20%20%20%20%20%20%20%20%20%27%26title%3D%27%20%2B%20encodeURIComponent%28%27Lead%3A%20%27%20%2B%20title%29%20%2B%0A%20%20%20%20%20%20%20%20%20%20%27%26body%3D%27%20%20%2B%20encodeURIComponent%28body%29%3B%0A%20%20location.href%20%3D%20u%3B%0A%7D%29%28%29%3B">➤ Lead to Echo</a> <span class="small">Create a Lead issue with page link</span></li>
+    <li><a class="btn outline" href="javascript:%28function%28%29%7B%0A%20%20var%20subj%20%3D%20%27Echo%3A%20%27%20%2B%20document.title%3B%0A%20%20var%20body%20%3D%20%27URL%3A%20%27%20%2B%20location.href%20%2B%20%27%5Cn%5CnNotes%3A%5Cn%27%20%2B%20%28window.getSelection%3FString%28window.getSelection%28%29%29%3A%27%27%29%3B%0A%20%20location.href%20%3D%20%27mailto%3A%3D%27%20%2B%20encodeURIComponent%28subj%29%20%2B%20%27%26body%3D%27%20%2B%20encodeURIComponent%28body%29%3B%0A%7D%29%28%29%3B">✉ Email this page</a> <span class="small">Prefilled email to d.birchfield74@gmail.com</span></li>
+  </ul>
 </div>
+<footer>© 2025 Echo</footer>
 </body>
