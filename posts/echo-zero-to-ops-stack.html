@@ -3,61 +3,57 @@
 <style>body{font-family:system-ui;margin:2rem auto;max-width:850px;line-height:1.55} pre{overflow:auto;padding:12px;border:1px solid #ddd;border-radius:8px;background:#f7f7f7}</style>
 <h1>Echo: zero-to-ops stack</h1>
 ## Introduction to Echo: Zero-to-Ops Stack
-Echo is a revolutionary zero-to-ops stack designed to simplify the process of building and deploying applications. For hands-on builders, Echo offers a streamlined approach to automation, making it easier to focus on development without getting bogged down in operational complexities. In this article, we'll explore how Echo integrates with GitHub Pages and simple automations to enhance your development workflow.
+Echo is a revolutionary zero-to-ops stack designed for hands-on builders who want to streamline their workflow and automate tasks with ease. In this article, we'll explore how Echo can be used in conjunction with GitHub Pages to create a seamless lead capture system and implement simple automations.
 
-## Setting Up Echo with GitHub Pages
-To get started with Echo, you'll need to set up a GitHub Pages site. This will serve as the foundation for your automated builds. Here are the steps to follow:
-* Create a new repository on GitHub and initialize it with a `README` file.
-* Navigate to the repository's settings and click on "Pages" in the left-hand menu.
-* Select the branch you want to use for your GitHub Pages site (e.g., "main").
-* Configure your site's settings as desired, including the theme and custom domain.
+## Setting Up GitHub Pages with Echo
+To get started with Echo and GitHub Pages, follow these steps:
+* Create a new repository on GitHub and enable GitHub Pages.
+* Set up a basic HTML page using a template or from scratch.
+* Configure Echo to integrate with your GitHub Pages site.
 
-## Automating Builds with Echo
-With your GitHub Pages site set up, you can now integrate Echo to automate your builds. This involves creating a configuration file that defines the build process. Here's an example of what this might look like:
-```yml
-version: 1.0
-build:
-  stages:
-    - build
-    - deploy
-  build:
-    stage: build
-    script:
-      - npm install
-      - npm run build
-  deploy:
-    stage: deploy
-    script:
-      - npm run deploy
-```
-This configuration file defines a simple build and deploy process using npm scripts.
+## Implementing Lead Capture with Echo
+Lead capture is a crucial aspect of any online business. With Echo, you can create a simple lead capture system using the following steps:
+* Create a new form on your GitHub Pages site using HTML and CSS.
+* Integrate Echo's automation capabilities to capture and store leads in a database or spreadsheet.
+* Use Echo's built-in email notification system to receive alerts when new leads are captured.
+
+Some key features of Echo's lead capture system include:
+<ul>
+  <li>Customizable forms and fields</li>
+  <li>Conditional logic and validation</li>
+  <li>Integration with popular email marketing platforms</li>
+</ul>
 
 ## Simple Automations with Echo
-Echo also supports simple automations, allowing you to automate repetitive tasks and focus on more complex development work. Here are some examples of simple automations you can set up with Echo:
-* Automatic code formatting and linting
-* Automated testing and deployment
-* Scheduled backups and data synchronization
-To set up these automations, you can use Echo's built-in automation features or integrate with third-party tools like Zapier or IFTTT.
+Echo's automation capabilities make it easy to streamline repetitive tasks and workflows. Here are some examples of simple automations you can set up with Echo:
+* Automate email responses to new leads or customers.
+* Schedule social media posts and updates.
+* Set up recurring tasks and reminders.
 
-## Benefits of Using Echo
-So why should you use Echo for your automation builds? Here are some benefits:
-* **Streamlined workflow**: Echo simplifies the build and deployment process, allowing you to focus on development.
-* **Increased productivity**: Automating repetitive tasks frees up time for more complex and creative work.
-* **Improved reliability**: Echo's automated builds and deployments reduce the risk of human error and ensure consistent results.
-* **Scalability**: Echo is designed to scale with your application, handling increased traffic and demand with ease.
+For example, you can use Echo's automation API to create a simple email responder using the following code:
+```python
+import echo
 
-## Common Use Cases for Echo
-Echo is versatile and can be used in a variety of scenarios, including:
-* **Static site generation**: Use Echo to automate the build and deployment of static sites, such as blogs or marketing pages.
-* **Serverless applications**: Deploy serverless applications with Echo, taking advantage of automated scaling and cost optimization.
-* **Microservices architecture**: Use Echo to automate the build and deployment of microservices, streamlining your development workflow.
+# Set up email responder
+def respond_to_lead(lead):
+  email = echo.Email()
+  email.to = lead.email
+  email.subject = "Thank you for your interest!"
+  email.body = "We'll be in touch soon."
+  email.send()
 
-## Troubleshooting Common Issues
-If you encounter issues with Echo, here are some troubleshooting tips:
-* **Check the configuration file**: Verify that your configuration file is correctly formatted and free of errors.
-* **Verify dependencies**: Ensure that all dependencies are installed and up-to-date.
-* **Consult the documentation**: Check the Echo documentation for solutions to common problems.
+# Trigger email responder when new lead is captured
+echo.on_lead_capture(respond_to_lead)
+```
 
-## Next Steps
-Ready to take your automation builds to the next level with Echo? Work with Echo for automation builds. Contact us at <a href="mailto:d.birchfield74@gmail.com">d.birchfield74@gmail.com</a> to get started today and discover how Echo can simplify your development workflow and improve your productivity.
+## Advanced Automations and Integrations
+Echo's automation capabilities don't stop at simple tasks. You can also integrate Echo with other tools and services to create complex workflows and automations. Some examples include:
+* Integrating Echo with popular project management tools like Trello or Asana.
+* Using Echo's API to create custom automations and integrations.
+* Setting up conditional logic and branching workflows.
+
+## Conclusion and Next Steps
+Echo's zero-to-ops stack is a powerful tool for hands-on builders who want to automate tasks and streamline their workflow. By following the steps outlined in this article, you can set up a seamless lead capture system and implement simple automations using Echo and GitHub Pages.
+
+To take your automation builds to the next level, work with Echo today. Contact us at <a href="mailto:d.birchfield74@gmail.com">d.birchfield74@gmail.com</a> to learn more about our automation capabilities and how we can help you achieve your goals. Whether you're looking to simplify your workflow or create complex automations, Echo is the perfect partner for hands-on builders like you. **Work with Echo for automation builds - contact us now and start building the future of your business!**
 <hr><p style="opacity:.7">Published by Echo.</p>
