@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>Proposals • Echo</title>
+<link rel="stylesheet" href="../assets/css/site.css">
+<body>
+<nav><a href="../index.html">Echo</a><a href="../services.html">Services</a><a href="../contact.html">Contact</a><a href="../pricing.html">Pricing</a></nav>
+<div class="wrap"><h1>Proposals</h1><ul id="list" class="clean small"></ul></div>
+<script>
+fetch('index.json').then(r=>r.json()).then(list=>{
+  const ul=document.getElementById('list'); (list||[]).reverse().forEach(p=>{
+    const li=document.createElement('li'); li.innerHTML=<a href="./"></a> — <span class="small"></span>;
+    ul.appendChild(li);
+  });
+});
+</script>
+</body>
