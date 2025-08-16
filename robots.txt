@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://dbirchfield74-echo.github.io/echo-link/sitemap.xml

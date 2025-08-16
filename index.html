@@ -1,53 +1,35 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Echo FOB</title>
-  <meta name="description" content="Forward Operating Base for Echo Prime"/>
-  <style>
-    html,body{margin:0;padding:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#0b0f14;color:#e6edf3}
-    .wrap{max-width:900px;margin:6rem auto;padding:0 1.25rem;text-align:center}
-    h1{font-weight:700;margin:0 0 0.5rem;font-size:2.4rem}
-    p{opacity:.85;margin:.25rem 0 1.5rem}
-    .btn{display:inline-block;padding:0.9rem 1.25rem;border:1px solid #2b3a4a;border-radius:10px;text-decoration:none;color:#e6edf3}
-    .btn:hover{background:#111826}
-    .grid{display:grid;gap:0.75rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1.25rem}
-    .card{padding:1rem;border:1px solid #2b3a4a;border-radius:10px;text-align:left;background:#0e141b}
-    code{background:#0e141b;padding:0.2rem 0.35rem;border-radius:6px}
-    footer{opacity:.6;margin-top:2rem;font-size:.9rem}
-  </style>
-</head>
+<!doctype html><html lang="en"><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Echo • Ops & Automations</title>
+<link rel="stylesheet" href="./assets/css/site.css"/>
 <body>
-  <div class="wrap">
-    <h1>Echo Forward Operating Base</h1>
-    <p>Launchpad for ops, intel, and maintenance.</p>
-
-    <a class="btn" id="launch" href="#">Launch Echo FOB</a>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Local Launch</h3>
-        <p>If you’re on the Echo machine, this opens the local dashboard.</p>
-        <code id="localUrl"></code>
-      </div>
-      <div class="card">
-        <h3>Remote Access (optional)</h3>
-        <p>When you add a public/tunnel URL, this page will point to it.</p>
-        <code id="remoteUrl">—</code>
-      </div>
-    </div>
-
-    <footer>Echo Prime • FOB</footer>
+<nav>
+  <a href="./index.html">Echo</a>
+  <a href="./services.html">Services</a>
+  <a href="./contact.html">Contact</a>
+</nav>
+<section class="hero wrap">
+  <h1>Echo — ship ops, faster</h1>
+  <p class="lead">No BS. We set up automations, simple dashboards, and a lean site to capture leads. Free stack; upgrade later.</p>
+  <p>
+    <a class="btn" href="mailto:=Echo%20project&body=Tell%20me%20about%20your%20project%2C%20goals%2C%20and%20timeline.">Book intro</a>
+    <a class="btn outline" href="./services.html">See services</a>
+  </p>
+</section>
+<div class="wrap">
+  <h2>Why Echo</h2>
+  <div class="grid">
+    <div class="card"><strong>Fast setup</strong><p class="small">GitHub Pages + simple scripts. No servers, no invoices to start.</p></div>
+    <div class="card"><strong>Free-first</strong><p class="small">Prefer free tiers and flip to paid when ROI shows.</p></div>
+    <div class="card"><strong>Monetize</strong><p class="small">Lead capture + productized services you can sell today.</p></div>
   </div>
-  <script>
-    const LOCAL_FOB  = "http://127.0.0.1:7071";
-    const REMOTE_FOB = "https://YOUR-FOB-PUBLIC-URL"; // put your Tailscale/ngrok/Cloudflare Tunnel URL here later (https://... )
-
-    const target = REMOTE_FOB || LOCAL_FOB;
-    document.getElementById('launch').href = target;
-    document.getElementById('localUrl').textContent = LOCAL_FOB;
-    document.getElementById('remoteUrl').textContent = REMOTE_FOB || "—";
-  </script>
-</body>
-</html>
+  <h2 style="margin-top:2rem">Latest posts</h2>
+  <ul id="posts" class="clean small"></ul>
+</div>
+<footer>© 2025 Echo</footer>
+<script>
+fetch('./posts.json').then(r=>r.ok?r.json():[]).then(list=>{
+  const ul=document.getElementById('posts'); if(!ul) return;
+  list.slice(-6).reverse().forEach(p=>{ const li=document.createElement('li'); li.innerHTML = '<a href="posts/'+p.slug+'.html">'+p.title+'</a> — <span class="small">'+p.date+'</span>'; ul.appendChild(li); });
+}).catch(()=>{});
+</script>
+</body></html>

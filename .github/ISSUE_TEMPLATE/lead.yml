@@ -1,0 +1,23 @@
+name: New Project / Lead
+description: Tell Echo about your project
+title: 'Lead: <short title>'
+labels: ['lead']
+body:
+  - type: input
+    id: name
+    attributes: { label: Your name }
+    validations: { required: true }
+  - type: input
+    id: email
+    attributes: { label: Email, description: 'We will reply within 1 business day.' }
+    validations: { required: true }
+  - type: dropdown
+    id: budget
+    attributes: { label: Budget, options: ['Under \','\–\','\–\','Over \'] }
+  - type: dropdown
+    id: timeline
+    attributes: { label: Timeline, options: ['ASAP','1–2 weeks','This month','Flexible'] }
+  - type: textarea
+    id: details
+    attributes: { label: Project details, description: 'What does success look like?' }
+    validations: { required: true }
