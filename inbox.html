@@ -1,0 +1,43 @@
+<!doctype html><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Echo • Inbox</title>
+<link rel="stylesheet" href="./assets/css/site.css"/>
+<body>
+<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./search.html">Search</a><a href="./inbox.html">Inbox</a></nav>
+<div class="wrap">
+  <h1>Inbox</h1>
+  <p class="small">Live view of GitHub Issues (no login required). Rate-limited; refresh if it stalls.</p>
+  <div class="grid">
+    <div class="card"><h3>Leads</h3><ul id="leads" class="clean small"></ul></div>
+    <div class="card"><h3>Quotes</h3><ul id="quotes" class="clean small"></ul></div>
+    <div class="card"><h3>Posts</h3><ul id="posts" class="clean small"></ul></div>
+  </div>
+</div>
+<footer>© 2025 Echo</footer>
+<script>
+const REPO="dbirchfield74-echo/echo-link";
+async function fetchLabel(label){
+  const u=`https://api.github.com/repos/${REPO}/issues?state=open&labels=${encodeURIComponent(label)}&per_page=30`;
+  const r=await fetch(u,{headers:{'Accept':'application/vnd.github+json'}});
+  if(!r.ok){return []}
+  return await r.json();
+}
+function render(list, id){
+  const ul=document.getElementById(id); if(!ul) return;
+  ul.innerHTML='';
+  list.forEach(i=>{
+    const li=document.createElement('li');
+    const t = i.title.replace(/^post:\s*/i,'').replace(/^lead:\s*/i,'').replace(/^quote:\s*/i,'');
+    li.innerHTML = `<a href="${i.html_url}" target="_blank">${t}</a> — <span class="small">${new Date(i.created_at).toISOString().slice(0,10)}</span>`;
+    ul.appendChild(li);
+  });
+}
+(async()=>{
+  try{
+    const [leads,quotes,posts] = await Promise.all([
+      fetchLabel('lead'), fetchLabel('quote'), fetchLabel('post')
+    ]);
+    render(leads,'leads'); render(quotes,'quotes'); render(posts,'posts');
+  }catch(e){}
+})();
+</script>
+</body>

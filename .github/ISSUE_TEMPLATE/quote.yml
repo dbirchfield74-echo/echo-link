@@ -1,23 +1,30 @@
 name: Request a Quote
-description: Share a bit about your project for a quick quote
+description: Quick quote request
 title: "Quote: <short title>"
 labels: ["quote","lead"]
 body:
   - type: input
     id: name
-    attributes: { label: Your name }
-    validations: { required: true }
+    attributes:
+      label: Your name
+    validations:
+      required: true
   - type: input
     id: email
-    attributes: { label: Email }
-    validations: { required: true }
+    attributes:
+      label: Email
+      description: We will reply within 1 business day.
+    validations:
+      required: true
   - type: dropdown
     id: budget
-    attributes: { label: Budget, options: ["Under ","–","–","Over "] }
-  - type: dropdown
-    id: timeline
-    attributes: { label: Timeline, options: ["ASAP","1–2 weeks","This month","Flexible"] }
+    attributes:
+      label: Budget
+      options: ["Under $200","$200–$500","$500–$1k","Over $1k"]
   - type: textarea
-    id: scope
-    attributes: { label: Scope, description: "What does success look like?" }
-    validations: { required: true }
+    id: details
+    attributes:
+      label: What do you want built?
+      description: One or two paragraphs are perfect.
+    validations:
+      required: true

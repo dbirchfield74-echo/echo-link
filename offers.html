@@ -2,26 +2,26 @@
 <title>Echo • Offers</title>
 <link rel="stylesheet" href="./assets/css/site.css"/>
 <body>
-<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./search.html">Search</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./contact.html">Contact</a></nav>
+<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./search.html">Search</a><a href="./inbox.html">Inbox</a></nav>
 <div class="wrap">
-  <h1>Offers</h1>
-  <div id="list" class="grid"></div>
-  <p class="small" id="note" style="margin-top:1rem;opacity:.8"></p>
+  <h1>Productized offers</h1>
+  <div class="grid">
+    <div class="card">
+      <h3>Site + Intake • $99</h3>
+      <p class="small">Custom landing, Contact, GitHub intake, sitemap/robots.</p>
+      <p><a class="btn" href="./contact.html">Start</a></p>
+    </div>
+    <div class="card">
+      <h3>Ops Mini • $199</h3>
+      <p class="small">Lead routing, one-click publish, basic automation.</p>
+      <p><a class="btn" href="./contact.html">Start</a></p>
+    </div>
+    <div class="card">
+      <h3>Ops Pro • $499</h3>
+      <p class="small">Scripts/schedulers, content pipeline, reports.</p>
+      <p><a class="btn" href="./contact.html">Start</a></p>
+    </div>
+  </div>
 </div>
-<script>
-async function load(){ try{ const r=await fetch('./offers.json'); if(!r.ok) throw 0; return await r.json(); }catch(e){ return [] } }
-function money(p,c){ return (p===0 ? 'Free' : ('$'+p)) + (c?' '+c:'') }
-function card(o){
-  const url = o.url || './contact.html';
-  return <div class="card"><h3></h3><p class="small"></p>
-          <p><strong></strong></p>
-          <p><a class="btn" href=""></a></p></div>;
-}
-load().then(list=>{
-  const el = document.getElementById('list');
-  if(!list.length){ el.innerHTML = '<div class="card">No offers yet.</div>'; return; }
-  el.innerHTML = list.map(card).join('');
-  const n=document.getElementById('note'); n.textContent = 'Tip: these buttons open a prefilled GitHub Issue (free intake).';
-});
-</script>
+<footer>© 2025 Echo</footer>
 </body>
