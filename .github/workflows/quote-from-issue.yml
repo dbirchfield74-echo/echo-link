@@ -1,0 +1,132 @@
+name: quote from issue (HTML+PDF)
+on:
+  issues:
+    types: [opened, edited, labeled]
+permissions:
+  contents: write
+  issues: write
+jobs:
+  build:
+    if: contains(toJson(github.event.issue.labels), "\"quote\"")
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://dbirchfield74-echo.github.io/echo-link
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive files & write HTML
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue  = context.payload.issue;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
+            const base   = process.env.BASE_URL || `https://github.com/${owner}/${repo}`;
+
+            // Title/slug
+            let title = (issue.title || '').replace(/^quote:\s*/i,'').trim() || 'Quote';
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') || 'quote';
+            const fname = `quote-${issue.number}-${slug}`;
+
+            // Extract fields if created via template (fallback to body)
+            const body  = issue.body || '';
+            function pick(id, label){
+              const re = new RegExp(`(?:(?:^|\\n)\\s*${label}\\s*\\n+|\\bid:\\s*${id}\\b[\\s\\S]*?\\nattributes:[\\s\\S]*?label:[^\\n]*\\n)[\\s\\S]*?\\n\\n([\\s\\S]*?)\\n(?=\\n|$)`,'i');
+              const m = re.exec(body);
+              return (m ? m[1] : '').trim();
+            }
+            // Light parse from GitHub form layout
+            const name     = pick('name','Your name') || '';
+            const email    = pick('email','Email') || '';
+            const company  = pick('company','Company') || '';
+            const budget   = pick('budget','Budget') || (body.match(/Budget.*?:\s*([^\n]+)/i)?.[1] ?? '').trim();
+            const timeline = pick('timeline','Timeline') || (body.match(/Timeline.*?:\s*([^\n]+)/i)?.[1] ?? '').trim();
+
+            // Pull details block
+            let details = '';
+            {
+              const re = /Project details[\s\S]*?\n{2,}([\s\S]*)/i;
+              const m = re.exec(body);
+              details = (m ? m[1] : body).trim();
+            }
+
+            // Basic sanitize
+            const esc = s => String(s||'').replace(/[&<>]/g,c=>({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c]));
+
+            const today = new Date().toISOString().slice(0,10);
+            const html = `<!doctype html><meta charset="utf-8">
+<title>${esc(title)} • Quote</title>
+<style>
+  :root{--fg:#111827;--mut:#6b7280}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;margin:40px auto;max-width:820px;line-height:1.55;color:var(--fg)}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  h1{font-size:26px;margin:0}
+  .meta{color:var(--mut);font-size:14px}
+  .box{border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin:12px 0}
+  ul{padding-left:18px}
+  .cta{margin-top:18px}
+  .btn{display:inline-block;padding:.6rem .9rem;border-radius:10px;border:1px solid #111827;text-decoration:none;color:#111827}
+  @media print{.noprint{display:none}}
+</style>
+<body>
+<header>
+  <h1>Project Quote</h1>
+  <button class="noprint btn" onclick="window.print()">Print / Save as PDF</button>
+</header>
+<div class="meta">Generated ${today} • Issue #${issue.number}</div>
+
+<div class="box"><strong>Title:</strong> ${esc(title)}</div>
+<div class="box">
+  <strong>Client:</strong> ${esc(name)} ${company ? '('+esc(company)+')' : ''}<br/>
+  <strong>Email:</strong> ${esc(email)}
+</div>
+<div class="box">
+  <strong>Budget:</strong> ${esc(budget)} &nbsp; • &nbsp; <strong>Timeline:</strong> ${esc(timeline)}
+</div>
+<div class="box">
+  <h3>Details</h3>
+  <pre style="white-space:pre-wrap">${esc(details)}</pre>
+</div>
+<div class="cta noprint">
+  <a class="btn" href="${base}/contact.html">Contact</a>
+  <a class="btn" href="${base}/proposals/simple-proposal.html">Printable proposal</a>
+</div>
+<footer class="meta" style="margin-top:24px">Echo — ops & automations • ${base}</footer>
+</body>`;
+
+            const fs = require('fs'), path = require('path');
+            const outDir = path.join(process.env.GITHUB_WORKSPACE,'quotes');
+            fs.mkdirSync(outDir, { recursive:true });
+            const htmlPath = path.join(outDir, `${fname}.html`);
+            fs.writeFileSync(htmlPath, html, 'utf8');
+
+            core.setOutput('fname', fname);
+            core.setOutput('htmlPath', htmlPath.replace(process.env.GITHUB_WORKSPACE + '/', ''));
+      - name: Install wkhtmltopdf
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wkhtmltopdf
+      - name: Render PDF
+        run: |
+          cd quotes
+          wkhtmltopdf --enable-local-file-access "${{ steps.github_script.outputs.fname }}.html" "${{ steps.github_script.outputs.fname }}.pdf"
+      - name: Commit files
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add quotes/
+          git commit -m "quote: add ${{ steps.github_script.outputs.fname }} (HTML+PDF)" || echo "No changes"
+          git pull --rebase
+          git push
+      - name: Comment links
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const base  = process.env.BASE_URL;
+            const fname = '${{ steps.github_script.outputs.fname }}';
+            const owner = context.repo.owner, repo = context.repo.repo;
+            const num   = context.payload.issue.number;
+            const page  = `${base}/quotes/${fname}.html`;
+            const pdf   = `${base}/quotes/${fname}.pdf`;
+            const body  = `Your quote is ready:\n\n- HTML: ${page}\n- PDF: ${pdf}\n\nUse **File → Save** if the PDF viewer opens in-browser.`;
+            await github.rest.issues.createComment({ owner, repo, issue_number: num, body });

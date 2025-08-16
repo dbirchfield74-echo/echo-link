@@ -1,7 +1,7 @@
 name: Request a Quote
-description: Tell Echo what you need and get a fast quote.
-title: 'Quote: <short title>'
-labels: ['quote','lead']
+description: Get a simple printable quote from Echo
+title: "Quote: <short project title>"
+labels: ["quote","lead"]
 body:
   - type: input
     id: name
@@ -11,10 +11,22 @@ body:
     id: email
     attributes: { label: Email }
     validations: { required: true }
+  - type: input
+    id: company
+    attributes: { label: Company (optional) }
   - type: dropdown
     id: budget
-    attributes: { label: Budget, options: ['Under \','\–\','\–\','Over \'] }
+    attributes:
+      label: Budget
+      options: ["Under $200","$200–$500","$500–$1k","Over $1k"]
+  - type: dropdown
+    id: timeline
+    attributes:
+      label: Timeline
+      options: ["ASAP","1–2 weeks","This month","Flexible"]
   - type: textarea
     id: details
-    attributes: { label: Project details, description: 'What does success look like?' }
+    attributes:
+      label: Project details
+      description: What does success look like?
     validations: { required: true }
