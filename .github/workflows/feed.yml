@@ -1,0 +1,40 @@
+name: build feed
+on:
+  push:
+    branches: [main]
+    paths:
+      - "posts/**"
+      - "posts.json"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo  = context.repo.repo;
+            const base  = "https://dbirchfield74-echo.github.io/echo-link";
+            async function get(path){
+              try{ const r=await github.rest.repos.getContent({owner,repo,path}); return r.data; }catch(e){ return null }
+            }
+            const list = await get('posts.json');
+            let posts=[];
+            if(list){
+              const txt = Buffer.from(list.content, list.encoding).toString('utf8');
+              try{ posts = JSON.parse(txt) }catch(e){ posts=[] }
+            }
+            const esc = s => String(s||'').replace(/[&<>]/g,c=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[c]));
+            const items = posts.map(p=>{
+              const link = base + '/posts/' + p.slug + '.html';
+              const pub  = new Date(p.date||Date.now()).toUTCString();
+              return `<item><title>${esc(p.title||'Untitled')}</title><link>${link}</link><guid>${link}</guid><pubDate>${pub}</pubDate></item>`;
+            }).join('\n');
+            const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>${esc(repo)} feed</title><link>${base}/</link><description>Posts</description><lastBuildDate>${new Date().toUTCString()}</lastBuildDate>${items}</channel></rss>`;
+            const exist = await get('feed.xml');
+            await github.rest.repos.createOrUpdateFileContents({
+              owner, repo, path: 'feed.xml', message: 'build: feed.xml',
+              content: Buffer.from(xml,'utf8').toString('base64'), sha: exist?.sha
+            });

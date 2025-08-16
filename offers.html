@@ -1,21 +1,27 @@
-<!doctype html><html lang="en"><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<!doctype html><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Echo • Offers</title>
 <link rel="stylesheet" href="./assets/css/site.css"/>
 <body>
 <nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./offers.html">Offers</a><a href="./pricing.html">Pricing</a><a href="./search.html">Search</a><a href="./bookmarklets.html">Bookmarklets</a><a href="./contact.html">Contact</a></nav>
 <div class="wrap">
-  <h1>Productized Offers</h1>
-  <div class="grid">
-    <div class="card"><h3>Starter • \</h3><p class="small">Pages site, intake, sitemap/robots. Great baseline.</p><p><a class="btn" href="https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Starter%20%28%29&body=Package%3A%20Starter%20%28free%29%250AWebsite%20%2B%20intake%20%2B%20SEO">Get Starter</a></p></div>
-    <div class="card"><h3>Ops Mini • \</h3><p class="small">Custom landing + lead routing + simple content flow.</p><p><a class="btn" href="https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Ops%20Mini%20%28%29&body=Package%3A%20Ops%20Mini%250ACustom%20landing%2C%20intake%20routing%2C%20simple%20content">Start Mini</a></p></div>
-    <div class="card"><h3>Ops Pro • \</h3><p class="small">Automations + content pipeline + deploy support.</p><p><a class="btn" href="https://github.com/dbirchfield74-echo/echo-link/issues/new?template=lead.yml&labels=lead&title=Lead%3A%20Ops%20Pro%20%28%29&body=Package%3A%20Ops%20Pro%250AAutomations%2C%20content%20pipeline%2C%20deploy">Start Pro</a></p></div>
-  </div>
-  <h2>What happens next?</h2>
-  <ul class="clean small">
-    <li>You submit a lead (GitHub issue)</li>
-    <li>We confirm scope and timeline</li>
-    <li>We ship! Free-first stack, upgrade when ROI is clear</li>
-  </ul>
+  <h1>Offers</h1>
+  <div id="list" class="grid"></div>
+  <p class="small" id="note" style="margin-top:1rem;opacity:.8"></p>
 </div>
-<footer>© 2025 Echo</footer>
-</body></html>
+<script>
+async function load(){ try{ const r=await fetch('./offers.json'); if(!r.ok) throw 0; return await r.json(); }catch(e){ return [] } }
+function money(p,c){ return (p===0 ? 'Free' : ('$'+p)) + (c?' '+c:'') }
+function card(o){
+  const url = o.url || './contact.html';
+  return <div class="card"><h3></h3><p class="small"></p>
+          <p><strong></strong></p>
+          <p><a class="btn" href=""></a></p></div>;
+}
+load().then(list=>{
+  const el = document.getElementById('list');
+  if(!list.length){ el.innerHTML = '<div class="card">No offers yet.</div>'; return; }
+  el.innerHTML = list.map(card).join('');
+  const n=document.getElementById('note'); n.textContent = 'Tip: these buttons open a prefilled GitHub Issue (free intake).';
+});
+</script>
+</body>
