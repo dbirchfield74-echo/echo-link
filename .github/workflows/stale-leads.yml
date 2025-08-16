@@ -1,0 +1,16 @@
+name: stale leads
+on:
+  schedule: [{ cron: "9 5 * * *" }]
+permissions: { issues: write, pull-requests: write }
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          days-before-stale: 14
+          days-before-close: 7
+          stale-issue-message: "This lead has been quiet for 14 days — closing soon. Comment to keep it open."
+          close-issue-message: "Closing as stale. Reopen anytime when you’re ready."
+          stale-issue-label: "stale"
+          only-labels: "lead"
