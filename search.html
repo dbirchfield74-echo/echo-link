@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Echo • Search</title>
+<link rel="stylesheet" href="./assets/css/site.css"/>
+<body>
+<nav><a href="./index.html">Echo</a><a href="./services.html">Services</a><a href="./contact.html">Contact</a><a href="./pricing.html">Pricing</a></nav>
+<div class="wrap">
+  <h1>Search</h1>
+  <input id="q" placeholder="Search posts..." style="width:100%;padding:.8rem;border:1px solid #223344;border-radius:10px;background:#0f141b;color:#e6edf3">
+  <ul id="results" class="clean" style="margin-top:1rem"></ul>
+</div>
+<script>
+async function load(){ try { return await (await fetch('./posts.json')).json() } catch { return [] } }
+function match(q, p){ q=q.toLowerCase(); return p.title.toLowerCase().includes(q) || p.slug.toLowerCase().includes(q) }
+function render(list){
+  const ul=document.getElementById('results'); ul.innerHTML='';
+  list.forEach(p=>{
+    const li=document.createElement('li');
+    li.innerHTML = `<a href="posts/${p.slug}.html">${p.title}</a> — <span class="small">${p.date||''}</span>`;
+    ul.appendChild(li);
+  });
+}
+let POSTS=[];
+load().then(ps=>{ POSTS=ps||[]; render(POSTS.slice(-20).reverse()) });
+document.getElementById('q').addEventListener('input',e=>{
+  const q=e.target.value.trim();
+  if(!q){ render(POSTS.slice(-20).reverse()); return; }
+  render(POSTS.filter(p=>match(q,p)).slice(0,50));
+});
+</script>
+</body>
