@@ -1,0 +1,12 @@
+name: New Post
+description: Publish a post via Issue
+title: "Post: <your title>"
+labels: ["post"]
+body:
+  - type: textarea
+    id: content
+    attributes:
+      label: Post content (Markdown / plain)
+      description: Paste your content. It will be rendered as preformatted text for now.
+    validations:
+      required: true
