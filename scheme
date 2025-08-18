@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<!--
+  Echo — Squarespace-style Grayscale Landing Page
+  Drop-in path (GitHub Pages): /site/index.html
+  Palette: whites + layered greys, minimal black accents
+  No external deps. Accessible. Mobile-friendly.
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Echo — Modern Grayscale</title>
+  <meta name="description" content="Echo: clean, modern, grayscale site with Squarespace-inspired layout." />
+  <meta property="og:title" content="Echo — Modern Grayscale" />
+  <meta property="og:description" content="Clean, modern, grayscale site with Squarespace-inspired layout." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#111111" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23111111'/%3E%3Ctext x='50%25' y='56%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='20' fill='%23fff'%3EE%3C/text%3E%3C/svg%3E">
+  <style>
+    :root{
+      --bg-0:#ffffff;  /* page */
+      --bg-1:#f7f7f9;  /* section */
+      --bg-2:#efeff2;  /* cards */
+      --line:#e6e8eb;
+      --text-0:#0a0a0a; /* headings */
+      --text-1:#1f2328; /* body strong */
+      --text-2:#4b5563; /* body muted */
+      --muted:#6b7280;
+      --accent:#111111; /* buttons/links */
+      --shadow:0 10px 30px rgba(17,17,17,.08);
+      --radius:16px;
+      --container:1200px;
+      --space:clamp(28px,4vw,56px);
+      --space-lg:clamp(40px,6vw,96px);
+    }
+
+    /* Reset / base */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Arial, Helvetica, "Apple Color Emoji", "Segoe UI Emoji";
+      background:var(--bg-0);
+      color:var(--text-1);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    img{max-width:100%;display:block}
+    a{color:var(--accent);text-decoration:none}
+    .container{max-width:var(--container);margin:0 auto;padding:0 20px}
+    .section{padding:var(--space-lg) 0}
+    .muted{color:var(--text-2)}
+    .eyebrow{letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:var(--muted)}
+    h1,h2,h3{color:var(--text-0);line-height:1.2;margin:0 0 12px}
+    h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:700}
+    h2{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:700}
+    h3{font-size:clamp(1.1rem,2.4vw,1.4rem);font-weight:600}
+    p{margin:0 0 1rem}
+    .btn{
+      display:inline-flex;align-items:center;gap:.6rem;
+      border:1px solid #111; color:#fff; background:var(--accent);
+      padding:.9rem 1.1rem;border-radius:999px;font-weight:600;
+      box-shadow:var(--shadow);transition:.2s ease;
+    }
+    .btn:hover{transform:translateY(-1px);opacity:.96}
+    .btn.outline{background:transparent;color:var(--text-0);border-color:var(--text-0);box-shadow:none}
+    .grid{display:grid;gap:20px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    @media (max-width:900px){ .grid.cols-3{grid-template-columns:1fr 1fr} }
+    @media (max-width:640px){ .grid.cols-2,.grid.cols-3{grid-template-columns:1fr} }
+
+    /* Header */
+    .site-header{
+      position:sticky;top:0;z-index:40;
+      backdrop-filter:saturate(180%) blur(10px);
+      background:rgba(255,255,255,.65);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:.7rem;font-weight:800;color:var(--text-0)}
+    .brand .logo{
+      width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#111,#3b3b3b);
+      display:grid;place-items:center;color:#fff;font-weight:800
+    }
+    .nav-links{display:flex;gap:18px;align-items:center}
+    .nav-links a{color:var(--text-1);font-weight:600}
+    .mobile-toggle{display:none}
+    @media (max-width:880px){
+      .mobile-toggle{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:.5rem;background:var(--bg-0)}
+      .nav-links{display:none}
+      .nav.open .nav-links{
+        position:fixed;inset:64px 14px auto 14px;display:flex;flex-direction:column;gap:12px;
+        background:var(--bg-0);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)
+      }
+    }
+
+    /* Hero */
+    .hero{padding:calc(var(--space-lg) + 20px) 0 var(--space-lg);background:var(--bg-0)}
+    .hero-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+    @media (max-width:900px){ .hero-wrap{grid-template-columns:1fr} }
+    .hero .lead{font-size:clamp(1.05rem,2.2vw,1.25rem);color:var(--text-2);max-width:58ch}
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+
+    /* Faux media block */
+    .mockup{
+      border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--bg-1);box-shadow:var(--shadow)
+    }
+    .mockup .bar{display:flex;gap:6px;padding:10px;border-bottom:1px solid var(--line);background:linear-gradient(#fafafa,#f1f1f1)}
+    .dot{width:10px;height:10px;border-radius:999px;background:#d4d4d4}
+    .mockup .screen{aspect-ratio:16/10;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px}
+    .ph{
+      border:1px dashed #d7d7db;border-radius:14px;background:
+        linear-gradient(145deg,#fcfcfd 0%, #f5f5f7 50%, #efeff2 100%);
+    }
+
+    /* Features */
+    .features{background:var(--bg-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .card{
+      border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-0);padding:20px;box-shadow:var(--shadow)
+    }
+    .card h3{margin-bottom:6px}
+    .kicker{font-weight:700;color:var(--text-0)}
+    .icon{
+      width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+      background:var(--bg-2);border:1px solid var(--line);font-weight:800;color:#333;margin-bottom:.6rem
+    }
+
+    /* Showcase */
+    .showcase .tile{border-radius:18px;border:1px solid var(--line);overflow:hidden;background:var(--bg-2)}
+    .showcase .tile .thumb{aspect-ratio:3/2;background:
+      repeating-linear-gradient(45deg,#f9f9fa 0 10px,#efeff2 10px 20px)}
+    .showcase .tile .meta{padding:12px;border-top:1px solid var(--line);background:var(--bg-0);display:flex;justify-content:space-between}
+
+    /* Testimonials */
+    .quotes{background:var(--bg-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .quote{border:1px solid var(--line);border-radius:18px;padding:20px;background:var(--bg-0);box-shadow:var(--shadow)}
+    .quote p{font-size:1.05rem}
+    .person{display:flex;align-items:center;gap:12px;margin-top:10px}
+    .avatar{width:36px;height:36px;border-radius:999px;background:#d8d8db;display:inline-block;border:1px solid var(--line)}
+
+    /* Pricing */
+    .pricing .plan{border:1px solid var(--line);border-radius:18px;background:var(--bg-0);padding:24px;box-shadow:var(--shadow)}
+    .price{font-size:2rem;font-weight:800;color:var(--text-0)}
+    .pill{display:inline-block;background:var(--bg-2);border:1px solid var(--line);border-radius:999px;padding:.35rem .7rem;font-weight:700;margin-bottom:8px}
+
+    /* FAQ */
+    .faq .qa{border-bottom:1px solid var(--line)}
+    .faq button{
+      width:100%;text-align:left;padding:16px 0;background:none;border:none;font-size:1rem;font-weight:700;color:var(--text-0);cursor:pointer
+    }
+    .faq .ans{max-height:0;overflow:hidden;transition:max-height .25s ease}
+    .faq .qa.open .ans{max-height:320px}
+
+    /* Contact */
+    .contact .form{
+      border:1px solid var(--line);border-radius:18px;background:var(--bg-0);padding:20px;box-shadow:var(--shadow)
+    }
+    .input{
+      display:block;width:100%;padding:.9rem 1rem;margin:.4rem 0 1rem;border-radius:12px;border:1px solid var(--line);
+      background:var(--bg-1);color:var(--text-1);outline:none
+    }
+    .input:focus{border-color:#b9bdc2;background:#fff}
+
+    /* Footer */
+    .site-footer{padding:28px 0;border-top:1px solid var(--line);background:var(--bg-0)}
+    .foot{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+    .small{font-size:.92rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" aria-label="Site header">
+    <div class="container nav" id="nav">
+      <a class="brand" href="#top" aria-label="Homepage">
+        <span class="logo" aria-hidden="true">E</span> Echo
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#work">Work</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+        <a class="btn outline" href="#contact">Get Started</a>
+      </nav>
+      <button class="mobile-toggle" id="navToggle" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <a id="top"></a>
+  <section class="hero">
+    <div class="container hero-wrap">
+      <div>
+        <div class="eyebrow">Minimal. Modular. Monochrome.</div>
+        <h1>Squarespace-style clarity, <br/>built for Echo.</h1>
+        <p class="lead">A clean grayscale layout with generous whitespace, smart typography, and a modular grid—drop it in and publish on GitHub Pages in minutes.</p>
+        <div class="cta">
+          <a class="btn" href="#contact">Book a consult</a>
+          <a class="btn outline" href="#work">See the work</a>
+        </div>
+      </div>
+      <div class="mockup" role="img" aria-label="Interface preview">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+        <div class="screen">
+          <div class="ph"></div>
+          <div class="ph"></div>
+          <div class="ph"></div>
+          <div class="ph"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="features section" aria-label="Features">
+    <div class="container">
+      <h2>Designed to feel effortless</h2>
+      <p class="muted" style="max-width:60ch">Simple cards, calm colors, and subtle dividers mimic the best Squarespace themes—minus the bloat.</p>
+      <div class="grid cols-3" style="margin-top:18px">
+        <article class="card">
+          <div class="icon">A</div>
+          <h3>All-in-one file</h3>
+          <p>Single HTML file with inline CSS & JS. Zero dependencies, zero fuss.</p>
+        </article>
+        <article class="card">
+          <div class="icon">G</div>
+          <h3>Grayscale first</h3>
+          <p>Layered whites and greys keep focus on your content, not chrome.</p>
+        </article>
+        <article class="card">
+          <div class="icon">R</div>
+          <h3>Responsive grid</h3>
+          <p>Auto-adjusting columns, generous spacing, and accessible contrast.</p>
+        </article>
+        <article class="card">
+          <div class="icon">S</div>
+          <h3>Squarespace vibe</h3>
+          <p>Big type, airy sections, and elegant cards with soft shadows.</p>
+        </article>
+        <article class="card">
+          <div class="icon">P</div>
+          <h3>Pages-ready</h3>
+          <p>Drop into <span class="kicker">/site/index.html</span>—Actions already deploy your site.</p>
+        </article>
+        <article class="card">
+          <div class="icon">⚙</div>
+          <h3>Easy to tweak</h3>
+          <p>Change palette and spacing via CSS variables at the top.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Showcase -->
+  <section id="work" class="showcase section" aria-label="Selected work">
+    <div class="container">
+      <h2>Selected work</h2>
+      <div class="grid cols-3" style="margin-top:18px">
+        <article class="tile">
+          <div class="thumb" aria-hidden="true"></div>
+          <div class="meta"><span>Case Study A</span><span class="muted">Brand</span></div>
+        </article>
+        <article class="tile">
+          <div class="thumb"></div>
+          <div class="meta"><span>Case Study B</span><span class="muted">Web</span></div>
+        </article>
+        <article class="tile">
+          <div class="thumb"></div>
+          <div class="meta"><span>Case Study C</span><span class="muted">Systems</span></div>
+        </article>
+        <article class="tile">
+          <div class="thumb"></div>
+          <div class="meta"><span>Case Study D</span><span class="muted">AI</span></div>
+        </article>
+        <article class="tile">
+          <div class="thumb"></div>
+          <div class="meta"><span>Case Study E</span><span class="muted">Ops</span></div>
+        </article>
+        <article class="tile">
+          <div class="thumb"></div>
+          <div class="meta"><span>Case Study F</span><span class="muted">Legal</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="quotes section" aria-label="Testimonials">
+    <div class="container">
+      <h2>What clients say</h2>
+      <div class="grid cols-3" style="margin-top:18px">
+        <figure class="quote">
+          <p>“Effortless and clean. Exactly what we needed.”</p>
+          <figcaption class="person"><span class="avatar" aria-hidden="true"></span> <span class="muted">A. Nguyen — Product Lead</span></figcaption>
+        </figure>
+        <figure class="quote">
+          <p>“Squarespace polish without the lock-in. Perfect.”</p>
+          <figcaption class="person"><span class="avatar"></span> <span class="muted">J. Patel — Founder</span></figcaption>
+        </figure>
+        <figure class="quote">
+          <p>“Fast to ship, easy to maintain, looks premium.”</p>
+          <figcaption class="person"><span class="avatar"></span> <span class="muted">S. Kim — Ops</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="pricing section" aria-label="Pricing">
+    <div class="container">
+      <h2>Simple pricing</h2>
+      <div class="grid cols-3" style="margin-top:18px">
+        <div class="plan">
+          <div class="pill">Starter</div>
+          <div class="price">$0</div>
+          <p class="muted">Basic page + contact</p>
+          <ul>
+            <li>Single page</li><li>Email link</li><li>GitHub Pages deploy</li>
+          </ul>
+          <a class="btn outline" href="#contact">Choose</a>
+        </div>
+        <div class="plan">
+          <div class="pill">Pro</div>
+          <div class="price">$49</div>
+          <p class="muted">Multi-section site</p>
+          <ul>
+            <li>Sections + gallery</li><li>FAQ + testimonials</li><li>Custom domains (later)</li>
+          </ul>
+          <a class="btn" href="#contact">Choose</a>
+        </div>
+        <div class="plan">
+          <div class="pill">Studio</div>
+          <div class="price">$149</div>
+          <p class="muted">Tailored & extended</p>
+          <ul>
+            <li>Brand tweaks</li><li>Extra pages</li><li>Priority updates</li>
+          </ul>
+          <a class="btn outline" href="#contact">Choose</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq section" aria-label="FAQ">
+    <div class="container">
+      <h2>Frequently asked</h2>
+      <div class="qa">
+        <button aria-expanded="false">Is this really one file?</button>
+        <div class="ans"><p class="muted">Yes—HTML with inline CSS/JS. No frameworks, no external fonts.</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false">How do I customize colors?</button>
+        <div class="ans"><p class="muted">Edit the CSS variables at the top (e.g., <code>--bg-1</code>, <code>--text-2</code>).</p></div>
+      </div>
+      <div class="qa">
+        <button aria-expanded="false">Where do images go?</button>
+        <div class="ans"><p class="muted">Replace the placeholder tiles with your images or add <code>&lt;img&gt;</code> elements.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="contact section" aria-label="Contact">
+    <div class="container grid cols-2">
+      <div>
+        <h2>Let’s work</h2>
+        <p class="muted">Tell me about your project and timelines. I’ll respond fast.</p>
+        <div style="margin-top:12px">
+          <p><strong>Email:</strong> <a href="mailto:hello@example.com">hello@example.com</a></p>
+          <p><strong>Location:</strong> Richmond, VA</p>
+        </div>
+      </div>
+      <form class="form" action="#" method="post" onsubmit="alert('Form demo only. Hook into Formspree or your backend.'); return false;" aria-label="Contact form">
+        <label class="muted">Name</label>
+        <input class="input" name="name" required />
+        <label class="muted">Email</label>
+        <input class="input" type="email" name="email" required />
+        <label class="muted">Message</label>
+        <textarea class="input" name="message" rows="5" required></textarea>
+        <button class="btn" type="submit">Send message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer" aria-label="Footer">
+    <div class="container foot">
+      <div class="small">© <span id="year"></span> Echo. All rights reserved.</div>
+      <div class="small"><a href="#top">Back to top ↑</a></div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const nav = document.getElementById('nav');
+    const navToggle = document.getElementById('navToggle');
+    navToggle?.addEventListener('click',()=> nav.classList.toggle('open'));
+
+    // Header subtle shadow on scroll
+    const header = document.querySelector('.site-header');
+    const setHead = ()=> header.style.boxShadow = window.scrollY>8 ? '0 6px 20px rgba(17,17,17,.06)' : 'none';
+    window.addEventListener('scroll', setHead); setHead();
+
+    // FAQ accordion
+    document.querySelectorAll('.faq .qa').forEach(q=>{
+      const btn=q.querySelector('button'); const ans=q.querySelector('.ans');
+      btn.addEventListener('click',()=>{
+        const open=q.classList.toggle('open');
+        btn.setAttribute('aria-expanded', String(open));
+      });
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
