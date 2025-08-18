@@ -1,3 +1,20 @@
+# General
 .DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.cache
+
+# Node
 node_modules/
 dist/
+.npm/
+
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+
+# VSCode
+.vscode/
